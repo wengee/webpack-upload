@@ -114,7 +114,7 @@ WebpackUpload.prototype.apply = function (compiler) {
         });
     };
 
-    compiler.plugin('emit', onEmit);
+    compiler.hooks.done.tap('emit', onEmit);
 };
 
 
@@ -291,6 +291,7 @@ function _parseUrl (url, opt) {
     opt = opt || {};
     url = Url.parse(url);
     var ssl = url.protocol === 'https:';
+    opt.protocol = url.protocol;
     opt.host = opt.host || opt.hostname || ((ssl || url.protocol === 'http:') ? url.hostname : 'localhost');
     opt.port = opt.port || (url.port || (ssl ? 443 : 80));
     opt.path = opt.path || (url.pathname + (url.search ? url.search : ''));
