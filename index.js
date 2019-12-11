@@ -40,7 +40,7 @@ function WebpackUpload (options) {
 WebpackUpload.prototype.apply = function (compiler) {
     var wpUploadOptions = this.wpUploadOptions;
 
-    var onEmit = function (compilation, callback) {        
+    var onEmit = function (compilation) {        
         var steps = [];
         async.forEach(Object.keys(compilation.assets), function(file, cb) {
                 // 重试次数
@@ -98,7 +98,7 @@ WebpackUpload.prototype.apply = function (compiler) {
         }.bind(this), function(err) {
             if(err) {
                 console.error(err);
-                return callback(err);
+                return;
             }
         });
 
@@ -106,15 +106,13 @@ WebpackUpload.prototype.apply = function (compiler) {
         async.series(steps, function (err, results) {
             if (err) {
                 console.error(err);
-                callback(err);
             }
             
             console.log('\n--------upload finish!--------\n');
-            callback();
         });
     };
 
-    compiler.plugin('emit', onEmit);
+    compiler.hooks.emit.tap('emit', onEmit);
 };
 
 
