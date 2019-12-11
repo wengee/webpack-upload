@@ -114,7 +114,7 @@ WebpackUpload.prototype.apply = function (compiler) {
         });
     };
 
-    compiler.hooks.done.tap('emit', onEmit);
+    compiler.plugin('emit', onEmit);
 };
 
 
